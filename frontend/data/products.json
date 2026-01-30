@@ -1,0 +1,130 @@
+[
+  {
+    "id": 1,
+    "name": "Cartoon Astronaut T-Shirts",
+    "price": 49.00,
+    "image": "img/products/f1.jpg",
+    "description": "High quality cotton t-shirt",
+    "category": "apparel"
+  },
+  {
+    "id": 2,
+    "name": "Leaf Printed T-Shirt",
+    "price": 39.00,
+    "image": "img/products/f2.jpg",
+    "description": "Classic Leaf printed tee",
+    "category": "apparel"
+  },
+  {
+    "id": 3,
+    "name": "Leaf Printed T-Shirt 2",
+    "price": 34.00,
+    "image": "img/products/f3.jpg",
+    "description": "Classic Leaf printed tee with premium fabric",
+    "category": "apparel"
+  },
+  {
+    "id": 4,
+    "name": "Flower Printed T-Shirt",
+    "price": 12.99,
+    "image": "img/products/f4.jpg",
+    "description": "Classic Flower printed tee",
+    "category": "apparel"
+  },
+  {
+    "id": 5,
+    "name": "Flower Printed T-Shirt 2",
+    "price": 14.99,
+    "image": "img/products/f5.jpg",
+    "description": "Classic Leaf printed tee with premium fabric",
+    "category": "apparel"
+  },
+  {
+    "id": 6,
+    "name": "Orange and Blue T-Shirt",
+    "price": 9.99,
+    "image": "img/products/f6.jpg",
+    "description": "Classic Orange and Blue T-Shirt",
+    "category": "apparel"
+  },
+  {
+    "id": 7,
+    "name": "Quality 3/4 Jeans",
+    "price": 9.99,
+    "image": "img/products/f7.jpg",
+    "description": "Quality 3/4 Jeans",
+    "category": "apparel"
+  },
+  {
+    "id": 8,
+    "name": "Quality Women Linen Top",
+    "price": 9.99,
+    "image": "img/products/f8.jpg",
+    "description": "Quality Women Linen Top",
+    "category": "apparel"
+  },
+  {
+    "id": 9,
+    "name": "Blue T-Shirt",
+    "price": 78.00,
+    "image": "img/products/n1.jpg",
+    "description": "adidas",
+    "category": "apparel"
+  },
+  {
+    "id": 10,
+    "name": "Grey T-Shirt",
+    "price": 78.00,
+    "image": "img/products/n2.jpg",
+    "description": "adidas",
+    "category": "apparel"
+  },
+  {
+    "id": 11,
+    "name": "White T-Shirt",
+    "price": 78.00,
+    "image": "img/products/n3.jpg",
+    "description": "adidas",
+    "category": "apparel"
+  },
+  {
+    "id": 12,
+    "name": "Army Camo T-Shirt",
+    "price": 78.00,
+    "image": "img/products/n4.jpg",
+    "description": "adidas",
+    "category": "apparel"
+  },
+  {
+    "id": 13,
+    "name": "Denim T-Shirts",
+    "price": 78.00,
+    "image": "img/products/n5.jpg",
+    "description": "adidas",
+    "category": "apparel"
+  },
+  {
+    "id": 14,
+    "name": "Shorts with Belt",
+    "price": 78.00,
+    "image": "img/products/n6.jpg",
+    "description": "adidas",
+    "category": "apparel"
+  },
+  {
+    "id": 15,
+    "name": "Codraw T-Shirt",
+    "price": 78.00,
+    "image": "img/products/n7.jpg",
+    "description": "adidas",
+    "category": "apparel"
+  },
+  {
+    "id": 16,
+    "name": "Chocolate T-Shirt",
+    "price": 78.00,
+    "image": "img/products/n8.jpg",
+    "description": "adidas",
+    "category": "apparel"
+  }
+]

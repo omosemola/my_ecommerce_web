@@ -1,0 +1,39 @@
+[
+  {
+    "id": "ORD-1769565183241",
+    "timestamp": "2026-01-28T01:53:03.241Z",
+    "status": "confirmed",
+    "customer": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john@example.com",
+      "phone": "+1234567890"
+    },
+    "shipping": {
+      "address": "123 Main Street",
+      "city": "San Francisco",
+      "state": "CA",
+      "zip": "94102",
+      "country": "USA"
+    },
+    "payment": "credit-card",
+    "items": [
+      {
+        "id": 1,
+        "name": "Cartoon Astronaut T-Shirt",
+        "price": 49,
+        "quantity": 2
+      },
+      {
+        "id": 2,
+        "name": "Leaf Printed T-Shirt",
+        "price": 39,
+        "quantity": 1
+      }
+    ],
+    "total": 160.7,
+    "subtotal": 137,
+    "tax": 13.7,
+    "shippingCost": 10
+  }
+]

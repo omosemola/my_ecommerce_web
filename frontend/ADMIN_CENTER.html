@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Control Center</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .control-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .control-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        
+        .control-card .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .control-card h2 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+        }
+        
+        .control-card p {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .control-card .features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 25px;
+        }
+        
+        .control-card .features li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .control-card .features li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .btn-primary {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .info-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .info-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .info-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .info-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .feature-highlight {
+            background: #f0f7ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .feature-highlight strong {
+            color: #1565c0;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👨‍💼 Admin Control Center</h1>
+            <p>Manage your e-commerce store operations</p>
+        </div>
+        
+        <div class="controls-grid">
+            <!-- Orders Management -->
+            <div class="control-card" onclick="window.location.href='admin-orders.html'">
+                <div class="icon">📦</div>
+                <h2>Order Management</h2>
+                <p>View, manage, and track customer orders</p>
+                <ul class="features">
+                    <li>View all orders</li>
+                    <li>Order statistics</li>
+                    <li>Search and filter</li>
+                    <li>Export to CSV</li>
+                    <li>Send shipping emails</li>
+                </ul>
+                <button class="btn-primary">Manage Orders →</button>
+            </div>
+            
+            <!-- Product Management -->
+            <div class="control-card" onclick="window.location.href='admin-products.html'">
+                <div class="icon">🏷️</div>
+                <h2>Product Management</h2>
+                <p>Add, edit, and remove products from your catalog</p>
+                <ul class="features">
+                    <li>Add new products</li>
+                    <li>Edit product details</li>
+                    <li>Delete products</li>
+                    <li>Manage categories</li>
+                    <li>Track inventory value</li>
+                </ul>
+                <button class="btn-primary">Manage Products →</button>
+            </div>
+            
+            <!-- Support & Resources -->
+            <div class="control-card">
+                <div class="icon">📚</div>
+                <h2>Documentation</h2>
+                <p>Learn how to use the admin features</p>
+                <ul class="features">
+                    <li>Product guides</li>
+                    <li>Order tutorials</li>
+                    <li>Email setup</li>
+                    <li>API reference</li>
+                    <li>Troubleshooting</li>
+                </ul>
+                <button class="btn-primary" onclick="window.location.href='FEATURES_GUIDE.html'">View Docs →</button>
+            </div>
+        </div>
+        
+        <!-- Product Management Details -->
+        <div class="info-section">
+            <h2>🏷️ Product Management Features</h2>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>➕ Add Products</h3>
+                    <p>Create new products with name, price, category, image URL, and description. Products are stored in data/products.json</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3>✏️ Edit Products</h3>
+                    <p>Update product details anytime. Changes are saved immediately and reflected on your storefront.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3>🗑️ Delete Products</h3>
+                    <p>Remove discontinued products from your catalog. Deletions are permanent but can be undone from backups.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3>📊 Inventory Stats</h3>
+                    <p>Track total products, inventory value, average price, and number of categories at a glance.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3>🔍 Search & Filter</h3>
+                    <p>Quickly find products by name. Filter by categories to organize your product management.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3>🏷️ Categories</h3>
+                    <p>Organize products by category: Apparel, Accessories, Footwear, Electronics, or Other.</p>
+                </div>
+            </div>
+            
+            <div class="feature-highlight">
+                <strong>📝 Database Storage:</strong> All products are stored in data/products.json for easy backup and migration
+            </div>
+            
+            <div class="feature-highlight">
+                <strong>🔒 Admin Authentication:</strong> Product management is protected - only admins with valid tokens can create, edit, or delete products
+            </div>
+            
+            <div class="feature-highlight">
+                <strong>🚀 Real-time Updates:</strong> Product changes are immediately available to customers on the frontend
+            </div>
+        </div>
+        
+        <!-- API Information -->
+        <div class="info-section">
+            <h2>🔌 Product API Endpoints</h2>
+            
+            <div class="feature-highlight">
+                <strong>Public - Read Only:</strong>
+                <p style="margin-top: 10px;">
+                    GET /api/products - List all products<br>
+                    GET /api/products/:id - Get specific product
+                </p>
+            </div>
+            
+            <div class="feature-highlight">
+                <strong>Admin - Full Control (Requires Authentication):</strong>
+                <p style="margin-top: 10px;">
+                    GET /api/admin/products - List all products (with auth)<br>
+                    POST /api/admin/products - Add new product<br>
+                    PUT /api/admin/products/:id - Update product<br>
+                    DELETE /api/admin/products/:id - Delete product
+                </p>
+            </div>
+            
+            <p style="color: #666; margin-top: 20px;">
+                All admin endpoints require an Authorization header with a valid admin JWT token from /api/admin/login
+            </p>
+        </div>
+        
+        <!-- Quick Start -->
+        <div class="info-section">
+            <h2>🚀 Quick Start</h2>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>Step 1: Login</h3>
+                    <p>Go to admin-orders.html and enter the admin password (default: admin123)</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3>Step 2: Navigate</h3>
+                    <p>Click the "🏷️ Products" link in the header navigation menu</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3>Step 3: Manage</h3>
+                    <p>Add, edit, or delete products from the product management interface</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Statistics -->
+        <div class="info-section">
+            <h2>📊 Admin Dashboard Statistics</h2>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>Orders Page Shows:</h3>
+                    <ul style="list-style: none; margin-top: 10px;">
+                        <li>✓ Total Orders</li>
+                        <li>✓ Total Revenue</li>
+                        <li>✓ Revenue This Month</li>
+                        <li>✓ Average Order Value</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h3>Products Page Shows:</h3>
+                    <ul style="list-style: none; margin-top: 10px;">
+                        <li>✓ Total Products</li>
+                        <li>✓ Total Inventory Value</li>
+                        <li>✓ Average Price</li>
+                        <li>✓ Number of Categories</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div style="text-align: center; margin-top: 50px;">
+            <h3 style="color: white; margin-bottom: 20px;">📱 Quick Navigation</h3>
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <button class="btn-primary" onclick="window.location.href='admin-orders.html'">Orders Dashboard</button>
+                <button class="btn-primary" onclick="window.location.href='admin-products.html'">Products Dashboard</button>
+                <button class="btn-primary" onclick="window.location.href='/'">Back to Store</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

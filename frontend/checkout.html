@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Tech2etc Ecommerce</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <section id="header">
+        <a href="#"><img src="img/logo.png" class="logo" alt=""></a>
+
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li id="lg-bag"><a href="cart.html"><i class="fas fa-shopping-bag"></i><span class="cart-count"
+                            id="cart-count">0</span></a></li>
+                <a href="#" id="close"><i class="fas fa-times"></i></a>
+            </ul>
+        </div>
+        <div id="mobile">
+            <a href="cart.html"><i class="fas fa-shopping-bag"></i><span class="cart-count"
+                    id="cart-count-mobile">0</span></a>
+            <i id="bar" class="fas fa-bars"></i>
+        </div>
+    </section>
+
+    <section id="page-header" class="about-header">
+        <h2>Checkout</h2>
+        <p>Complete Your Purchase</p>
+    </section>
+
+    <section id="checkout" class="section-p1">
+        <div class="checkout-container">
+            <!-- Order Summary (Left - Full Height) -->
+            <div class="order-summary">
+                <h3>Order Summary</h3>
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <td>Product</td>
+                            <td>Quantity</td>
+                            <td>Price</td>
+                            <td>Subtotal</td>
+                        </tr>
+                    </thead>
+                    <tbody id="checkout-items">
+                        <!-- Items will be populated from cart -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Right Column: Billing, Payment, and Totals -->
+            <div class="checkout-right-column">
+                <!-- Billing Information -->
+                <div class="billing-section">
+                    <h3>Billing Information</h3>
+                    <form id="checkoutForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address">Street Address *</label>
+                            <input type="text" id="address" name="address" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City *</label>
+                                <input type="text" id="city" name="city" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State/Province *</label>
+                                <input type="text" id="state" name="state" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="zip">Postal Code *</label>
+                                <input type="text" id="zip" name="zip" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country *</label>
+                                <input type="text" id="country" name="country" required>
+                            </div>
+                        </div>
+
+
+                    </form>
+                </div>
+
+                <!-- Payment Method Section -->
+                <div class="payment-section">
+                    <h3>Payment Method</h3>
+                    <div class="payment-methods">
+                        <div class="payment-option">
+                            <input type="radio" id="credit-card" name="payment" value="credit-card" checked>
+                            <label for="credit-card"><i class="fas fa-credit-card"></i> Credit/Debit Card
+                                (Stripe)</label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="transfer" name="payment" value="transfer">
+                            <label for="transfer"><i class="fas fa-university"></i> Bank Transfer</label>
+                        </div>
+                    </div>
+
+                    <!-- Stripe Payment Form -->
+                    <div id="stripe-payment" style="margin-top: 20px;">
+                        <h4>Card Details</h4>
+                        <div id="card-element"
+                            style="border: 1px solid #ddd; padding: 12px; border-radius: 4px; background: white; margin-bottom: 10px;">
+                        </div>
+                        <div id="card-errors" role="alert" style="color: #fa755a; margin-bottom: 10px;"></div>
+                    </div>
+
+                    <!-- Bank Transfer Option -->
+                    <div id="bank-transfer-trigger" style="display: none; margin-top: 20px;">
+                        <button type="button" id="open-bank-modal-btn" class="normal"
+                            style="width: 100%; background-color: #088178; color: white;">
+                            <i class="fas fa-university"></i> Pay via Bank Transfer
+                        </button>
+                    </div>
+
+                    <div class="order-totals">
+                        <h3>Order Summary</h3>
+                        <div class="totals-row">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">₦0.00</span>
+                        </div>
+                        <div class="totals-row">
+                            <span>Shipping:</span>
+                            <span id="shipping">₦0.00</span>
+                        </div>
+                        <div class="totals-row">
+                            <span>Tax:</span>
+                            <span id="tax">₦0.00</span>
+                        </div>
+                        <div class="totals-row total">
+                            <span>Total:</span>
+                            <span id="total">₦0.00</span>
+                        </div>
+                        <div class="terms-checkbox" style="margin-top: 20px;">
+                            <input type="checkbox" id="terms" name="terms" required>
+                            <label for="terms">
+                                I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>
+                            </label>
+                        </div>
+
+                        <button type="submit" id="payment-btn" class="normal"
+                            style="margin-top: 20px; width: 100%; background-color: #088178; color: white;">
+                            <i class="fas fa-lock"></i> Pay Securely with Stripe
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Order Totals -->
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Modal -->
+    <div class="pay-modal-overlay" id="paymentModal">
+        <div class="pay-modal-content">
+            <div class="pay-close-btn" onclick="closePaymentModal()">&times;</div>
+            <div class="pay-modal-header">
+                <h2>Bank Transfer Payment</h2>
+            </div>
+
+            <div class="pay-amount-box">
+                <p>Total Amount to Send:</p>
+                <h3 id="modal-total-amount">₦0.00</h3>
+            </div>
+
+            <div class="pay-details-box">
+                <p><strong>Bank Name:</strong> UBA</p>
+                <p><strong>Account Number:</strong> 2016378833</p>
+                <p><strong>Account Name:</strong> JUBRYEK TOMIWA</p>
+            </div>
+
+            <div class="pay-disclaimer">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Disclaimer:</strong> Send the Exact Amount to the Bank Account above and click paid after doing
+                that.
+            </div>
+
+            <div class="pay-timer" style="margin-bottom: 20px; font-size: 18px; color: #d32f2f; font-weight: bold;">
+                Time Remaining: <span id="payment-timer">01:30</span>
+            </div>
+
+            <button type="button" id="sent-money-btn" class="pay-confirm-btn">
+                I've sent the money <i class="fas fa-check-circle"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="section-p1">
+        <div class="col">
+            <img class="logo" src="img/logo.png" alt="">
+            <h4>Contact</h4>
+            <p>
+                <strong>Address: </strong>
+                562 Wellington Road, Street 32, San Francisco
+            </p>
+            <p>
+                <strong>Phone:</strong> +1 465 564 2233 / +1 465 564 2234
+            </p>
+            <p>
+                <strong>Hours:</strong>
+                10:00 - 18:00, Mon - Sun
+            </p>
+        </div>
+
+        <div class="col">
+            <h4>About</h4>
+            <a href="#">About Us</a>
+            <a href="#">Delivery Information</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+        </div>
+
+        <div class="col">
+            <h4>My Account</h4>
+            <a href="#">Sign In</a>
+            <a href="#">View Cart</a>
+            <a href="#">My Wishlist</a>
+            <a href="#">Track My Order</a>
+            <a href="#">Help</a>
+        </div>
+
+        <div class="col install">
+            <h4>Install App</h4>
+            <p>From App Store or Google Play</p>
+            <div class="row">
+                <img src="img/pay/app.jpg" alt="">
+                <img src="img/pay/play.jpg" alt="">
+            </div>
+            <p>Secured Payment Gateways</p>
+            <img src="img/pay/pay.png" alt="">
+        </div>
+
+        <div class="copyright">
+            <p>@ 2024, Tech2etc - HTML CSS Ecommerce Template</p>
+        </div>
+    </footer>
+
+    <script src="js/cart.js"></script>
+    <script src="js/script.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        // Initialize Stripe
+        let stripe, elements, cardElement;
+
+        // Fetch Stripe public key and initialize
+        async function initStripe() {
+            try {
+                const response = await fetch('/api/stripe-public-key');
+                const data = await response.json();
+
+                stripe = Stripe(data.publicKey);
+                elements = stripe.elements();
+                cardElement = elements.create('card');
+                cardElement.mount('#card-element');
+
+                // Handle real-time validation errors
+                cardElement.addEventListener('change', (event) => {
+                    const displayError = document.getElementById('card-errors');
+                    if (event.error) {
+                        displayError.textContent = event.error.message;
+                    } else {
+                        displayError.textContent = '';
+                    }
+                });
+
+                console.log('✅ Stripe initialized successfully');
+            } catch (error) {
+                console.error('❌ Failed to initialize Stripe:', error);
+            }
+        }
+
+        // Initialize checkout page after DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            initStripe();
+
+            // Toggle Payment Sections
+            const creditCardRadio = document.getElementById('credit-card');
+            const transferRadio = document.getElementById('transfer');
+            const stripeSection = document.getElementById('stripe-payment');
+            const bankTrigger = document.getElementById('bank-transfer-trigger');
+            const paymentBtn = document.getElementById('payment-btn'); // Stripe submit
+            const modal = document.getElementById('paymentModal');
+            const openModalBtn = document.getElementById('open-bank-modal-btn');
+
+            function togglePaymentMethod() {
+                if (transferRadio.checked) {
+                    stripeSection.style.display = 'none';
+                    bankTrigger.style.display = 'block';
+                    paymentBtn.style.display = 'none';
+                } else {
+                    stripeSection.style.display = 'block';
+                    bankTrigger.style.display = 'none';
+                    paymentBtn.style.display = 'block';
+                }
+            }
+
+            creditCardRadio.addEventListener('change', togglePaymentMethod);
+            transferRadio.addEventListener('change', togglePaymentMethod);
+
+            // Timer Logic
+            let timerInterval;
+            const timerDisplay = document.getElementById('payment-timer');
+
+            function startTimer(duration) {
+                let timer = duration, minutes, seconds;
+                clearInterval(timerInterval); // Clear any existing
+
+                timerInterval = setInterval(function () {
+                    minutes = parseInt(timer / 60, 10);
+                    seconds = parseInt(timer % 60, 10);
+
+                    minutes = minutes < 10 ? "0" + minutes : minutes;
+                    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                    timerDisplay.textContent = minutes + ":" + seconds;
+
+                    if (--timer < 0) {
+                        clearInterval(timerInterval);
+                        timerDisplay.textContent = "00:00 (Expired)";
+                        timerDisplay.style.color = 'red';
+                        // Optional: Close modal or disable button
+                    }
+                }, 1000);
+            }
+
+            // Modal Functions
+            window.closePaymentModal = function () {
+                modal.classList.remove('active');
+                setTimeout(() => { modal.style.display = 'none'; }, 300);
+                clearInterval(timerInterval); // Stop timer
+            }
+
+            openModalBtn.addEventListener('click', () => {
+                // Check terms only
+                if (!document.getElementById('terms').checked) {
+                    alert('Please agree to the Terms & Conditions before paying.');
+                    return;
+                }
+
+                // Update Total in Modal
+                const totalText = document.getElementById('total').textContent;
+                document.getElementById('modal-total-amount').textContent = totalText;
+
+                // Open Modal
+                console.log('Opening Payment Modal');
+                modal.style.display = 'flex';
+                // Small delay for transition
+                setTimeout(() => { modal.classList.add('active'); }, 10);
+
+                // Start 90s timer
+                startTimer(90);
+            });
+
+            // Handle "I've sent the money" button
+            const sentMoneyBtn = document.getElementById('sent-money-btn');
+            sentMoneyBtn.addEventListener('click', async () => {
+                if (confirm('Have you transferred the exact amount to the account provided?')) {
+                    // Simulate success
+                    window.cartManager.clearCart();
+                    window.cartManager.showNotification('Payment Confirmed! Order Placed.', 'success');
+                    closePaymentModal();
+
+                    setTimeout(() => {
+                        const orderId = 'ORD-' + Math.floor(Math.random() * 1000000);
+                        const email = document.getElementById('email').value;
+                        window.location.href = `order-success.html?orderId=${orderId}&email=${encodeURIComponent(email)}`;
+                    }, 1500);
+                }
+            });
+
+            const checkoutForm = document.getElementById('checkoutForm');
+            const checkoutCartManager = window.cartManager;
+
+            // Debug: Check if cart loaded
+            console.log('Cart Manager initialized');
+
+            // Load order summary
+            function loadOrderSummary() {
+                const cart = checkoutCartManager.getCart();
+                const checkoutItems = document.getElementById('checkout-items');
+
+                checkoutItems.innerHTML = cart.map(item => {
+                    const itemTotal = (item.price * item.quantity).toFixed(2);
+                    return `
+                        <tr>
+                            <td data-label="Product">${item.name}</td>
+                            <td data-label="Quantity">${item.quantity}</td>
+                            <td data-label="Price">₦${item.price.toFixed(2)}</td>
+                            <td data-label="Subtotal">₦${itemTotal}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+                updateTotals();
+            }
+
+            function updateTotals() {
+                const cart = checkoutCartManager.getCart();
+                const subtotal = checkoutCartManager.getCartTotal();
+                const shipping = subtotal > 100 ? 0 : 10;
+                const tax = (subtotal * 0.08).toFixed(2);
+                const total = (subtotal + shipping + parseFloat(tax)).toFixed(2);
+
+                document.getElementById('subtotal').textContent = `₦${subtotal.toFixed(2)}`;
+                document.getElementById('shipping').textContent = shipping === 0 ? 'Free' : `₦${shipping.toFixed(2)}`;
+                document.getElementById('tax').textContent = `₦${tax}`;
+                document.getElementById('total').textContent = `₦${total}`;
+            }
+
+            // Handle form submission
+            checkoutForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Check if terms are agreed
+                if (!document.getElementById('terms').checked) {
+                    alert('Please agree to the Terms & Conditions');
+                    return;
+                }
+
+                const submitBtn = document.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Payment...';
+
+                try {
+                    // Get form data
+                    const formData = {
+                        firstName: document.getElementById('firstName').value,
+                        lastName: document.getElementById('lastName').value,
+                        email: document.getElementById('email').value,
+                        phone: document.getElementById('phone').value,
+                        address: document.getElementById('address').value,
+                        city: document.getElementById('city').value,
+                        state: document.getElementById('state').value,
+                        zipcode: document.getElementById('zipcode').value
+                    };
+
+                    // Validate all fields are filled
+                    if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.address || !formData.city || !formData.state) {
+                        throw new Error('Please fill in all required fields');
+                    }
+
+                    // Get cart and totals
+                    const cart = checkoutCartManager.getCart();
+                    const subtotal = checkoutCartManager.getCartTotal();
+                    const shipping = subtotal > 100 ? 0 : 10;
+                    const tax = (subtotal * 0.08).toFixed(2);
+                    const total = (subtotal + shipping + parseFloat(tax)).toFixed(2);
+
+                    if (cart.length === 0) {
+                        throw new Error('Your cart is empty');
+                    }
+
+                    // Step 1: Create payment intent
+                    const paymentIntentResponse = await fetch('/api/create-payment-intent', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            amount: parseFloat(total),
+                            currency: 'NGN',
+                            customerEmail: formData.email,
+                            customerName: `${formData.firstName} ${formData.lastName}`
+                        })
+                    });
+
+                    const paymentIntentData = await paymentIntentResponse.json();
+
+                    if (!paymentIntentData.success) {
+                        throw new Error(paymentIntentData.error || 'Failed to create payment intent');
+                    }
+
+                    console.log('💳 Payment Intent created:', paymentIntentData.paymentIntentId);
+
+                    // Step 2: Confirm payment with Stripe
+                    const { error, paymentIntent } = await stripe.confirmCardPayment(
+                        paymentIntentData.clientSecret,
+                        {
+                            payment_method: {
+                                card: cardElement,
+                                billing_details: {
+                                    name: `${formData.firstName} ${formData.lastName}`,
+                                    email: formData.email
+                                }
+                            }
+                        }
+                    );
+
+                    if (error) {
+                        throw new Error(error.message);
+                    }
+
+                    if (paymentIntent.status !== 'succeeded') {
+                        throw new Error('Payment failed. Status: ' + paymentIntent.status);
+                    }
+
+                    console.log('✅ Payment succeeded');
+
+                    // Step 3: Process order on backend
+                    const orderResponse = await fetch('/api/process-payment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            paymentIntentId: paymentIntent.id,
+                            orderData: {
+                                customer: {
+                                    firstName: formData.firstName,
+                                    lastName: formData.lastName,
+                                    email: formData.email,
+                                    phone: formData.phone
+                                },
+                                address: formData.address,
+                                city: formData.city,
+                                state: formData.state,
+                                zipcode: formData.zipcode,
+                                subtotal: parseFloat(subtotal.toFixed(2)),
+                                shipping: shipping,
+                                tax: parseFloat(tax)
+                            },
+                            items: cart,
+                            total: parseFloat(total)
+                        })
+                    });
+
+                    const orderResult = await orderResponse.json();
+
+                    if (!orderResult.success) {
+                        throw new Error(orderResult.error || 'Failed to create order');
+                    }
+
+                    console.log('✅ Order created:', orderResult.orderId);
+
+                    // Clear cart
+                    checkoutCartManager.clearCart();
+
+                    // Redirect to success page
+                    window.location.href = `order-success.html?orderId=${orderResult.orderId}&email=${encodeURIComponent(formData.email)}`;
+
+                } catch (error) {
+                    console.error('❌ Checkout error:', error);
+                    alert('Payment Error: ' + error.message);
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+            });
+
+            // Load order summary on page load
+            console.log('Cart items:', checkoutCartManager.cart);
+            console.log('LocalStorage cart:', localStorage.getItem('cart'));
+
+            // Populate order summary
+            function loadOrderSummary() {
+                const tbody = document.getElementById('checkout-items');
+                let subtotal = 0;
+
+                // Reload cart from localStorage to get latest items
+                const storedCart = localStorage.getItem('cart');
+                console.log('Stored cart data:', storedCart);
+
+                checkoutCartManager.cart = checkoutCartManager.loadCartFromStorage();
+                console.log('Loaded cart:', checkoutCartManager.cart);
+
+                if (!checkoutCartManager.cart || checkoutCartManager.cart.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">No items in cart</td></tr>';
+                    document.getElementById('subtotal').textContent = '₦0.00';
+                    document.getElementById('shipping').textContent = '₦0.00';
+                    document.getElementById('tax').textContent = '₦0.00';
+                    document.getElementById('total').textContent = '₦0.00';
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                checkoutCartManager.cart.forEach(item => {
+                    console.log('Processing item:', item);
+                    const itemTotal = item.price * item.quantity;
+                    subtotal += itemTotal;
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td data-label="Product">${item.name}</td>
+                        <td data-label="Quantity">${item.quantity}</td>
+                        <td data-label="Price">₦${item.price.toFixed(2)}</td>
+                        <td data-label="Subtotal">₦${itemTotal.toFixed(2)}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+                // Calculate totals
+                const shipping = subtotal > 100 ? 0 : 10; // Free shipping over ₦100
+                const tax = subtotal * 0.1; // 10% tax
+                const total = subtotal + shipping + tax;
+
+                document.getElementById('subtotal').textContent = `₦${subtotal.toFixed(2)}`;
+                document.getElementById('shipping').textContent = `₦${shipping.toFixed(2)}`;
+                document.getElementById('tax').textContent = `₦${tax.toFixed(2)}`;
+                document.getElementById('total').textContent = `₦${total.toFixed(2)}`;
+            }
+
+            // Handle form submission
+            checkoutForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Collect form data
+                const formData = new FormData(checkoutForm);
+                const subtotal = parseFloat(document.getElementById('subtotal').textContent.replace('₦', ''));
+                const shipping = parseFloat(document.getElementById('shipping').textContent.replace('₦', ''));
+                const tax = parseFloat(document.getElementById('tax').textContent.replace('₦', ''));
+                const total = parseFloat(document.getElementById('total').textContent.replace('₦', ''));
+
+                const checkoutData = {
+                    customer: {
+                        firstName: formData.get('firstName'),
+                        lastName: formData.get('lastName'),
+                        email: formData.get('email'),
+                        phone: formData.get('phone')
+                    },
+                    shipping: {
+                        address: formData.get('address'),
+                        city: formData.get('city'),
+                        state: formData.get('state'),
+                        zip: formData.get('zip'),
+                        country: formData.get('country')
+                    },
+                    payment: formData.get('payment'),
+                    items: checkoutCartManager.cart,
+                    subtotal: subtotal,
+                    shippingCost: shipping,
+                    tax: tax,
+                    total: total
+                };
+
+                try {
+                    // Show loading state
+                    const submitBtn = checkoutForm.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+                    // Send order to backend
+                    const response = await fetch('/api/orders', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(checkoutData)
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && result.success) {
+                        console.log('✅ Order placed successfully:', result.orderId);
+
+                        // Clear cart
+                        checkoutCartManager.clearCart();
+
+                        // Redirect to success page with order ID
+                        window.location.href = `order-success.html?orderId=${result.orderId}&email=${encodeURIComponent(checkoutData.customer.email)}`;
+                    } else {
+                        throw new Error(result.error || 'Failed to place order');
+                    }
+                } catch (error) {
+                    console.error('❌ Order error:', error);
+                    alert('Error placing order: ' + error.message);
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }
+            });
+
+            // Load order summary on page load
+            loadOrderSummary();
+        });
+    </script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

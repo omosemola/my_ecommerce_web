@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Tech2etc Ecommerce</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Google OAuth SDK -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <!-- Facebook SDK -->
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0" nonce="YOUR_APP_ID"></script>
+    
+    <style>
+        .auth-container {
+            max-width: 450px;
+            margin: 60px auto;
+            padding: 40px;
+            background: #fafafa;
+            border-radius: 4px;
+            box-shadow: 20px 20px 34px rgba(0, 0, 0, 0.03);
+            border: 1px solid #cce7d0;
+        }
+
+        .auth-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #222;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #222;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #cce7d0;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: "Spartan", sans-serif;
+            transition: 0.3s ease;
+            box-sizing: border-box;
+            background: #fff;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #088178;
+            box-shadow: 0 0 0 3px rgba(8, 129, 120, 0.1);
+        }
+
+        .form-group input.error {
+            border-color: #d91e63;
+        }
+
+        .error-message {
+            color: #d91e63;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            margin-bottom: 20px;
+        }
+
+        .btn-signup {
+            width: 100%;
+            padding: 12px 15px;
+            background: #088178;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s ease;
+            margin-top: 10px;
+            font-family: "Spartan", sans-serif;
+        }
+
+        .btn-signup:hover {
+            background: #066d62;
+        }
+
+        .btn-signup:disabled {
+            background: #bbb;
+            cursor: not-allowed;
+        }
+
+        .btn-signup.loading {
+            position: relative;
+        }
+
+        .btn-signup.loading::after {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            top: 50%;
+            right: 15px;
+            margin-top: -7px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .auth-links {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #465b52;
+        }
+
+        .auth-links a {
+            color: #088178;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-danger {
+            background: #fddde4;
+            color: #d91e63;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background: #dfd6e8;
+            color: #088178;
+            border: 1px solid #cce7d0;
+        }
+
+        .terms-checkbox {
+            display: flex;
+            align-items: flex-start;
+            margin: 20px 0;
+        }
+
+        .terms-checkbox input {
+            width: auto;
+            margin-right: 8px;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+
+        .terms-checkbox label {
+            margin: 0;
+            font-weight: normal;
+            font-size: 12px;
+            color: #465b52;
+            cursor: pointer;
+        }
+
+        .terms-checkbox a {
+            color: #088178;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .terms-checkbox a:hover {
+            text-decoration: underline;
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #465b52;
+            font-weight: 500;
+        }
+
+        .strength-bar {
+            height: 3px;
+            background: #cce7d0;
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+
+        .strength-bar-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s, background-color 0.3s;
+            background-color: #d91e63;
+        }
+
+        .strength-bar-fill.weak {
+            background-color: #ffa500;
+            width: 33%;
+        }
+
+        .strength-bar-fill.medium {
+            background-color: #ffa500;
+            width: 66%;
+        }
+
+        .strength-bar-fill.strong {
+            background-color: #088178;
+            width: 100%;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0 15px 0;
+            color: #999;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .social-signup {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .social-btn {
+            padding: 12px;
+            border: 1px solid #cce7d0;
+            border-radius: 4px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: "Spartan", sans-serif;
+            color: #222;
+        }
+
+        .social-btn:hover {
+            background: #fddde4;
+            border-color: #088178;
+        }
+
+        .social-btn i {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <section id="header">
+        <a href="index.html"><img src="img/logo.png" class="logo" alt=""></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li id="lg-bag"><a href="cart.html"><i class="fas fa-shopping-bag"></i></a></li>
+                <a href="#" id="close"><i class="fas fa-times"></i></a>
+            </ul>
+        </div>
+        <div id="mobile">
+            <a href="cart.html"><i class="fas fa-shopping-bag"></i></a>
+            <i id="bar" class="fas fa-bars"></i>
+        </div>
+    </section>
+
+    <section class="auth-container">
+        <h2><i class="fas fa-user-plus"></i> Create Account</h2>
+
+        <div id="alertBox" class="alert" role="alert"></div>
+
+        <form id="signupForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                    <div class="error-message"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                    <div class="error-message"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+                <div class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number (Optional)</label>
+                <input type="tel" id="phone" name="phone">
+                <div class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <div class="error-message"></div>
+                <div class="password-strength">
+                    <div class="strength-bar">
+                        <div class="strength-bar-fill"></div>
+                    </div>
+                    <span id="strengthText">Password strength: Weak</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <div class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="country">Country</label>
+                <select id="country" name="country" required>
+                    <option value="NG" selected>Nigeria</option>
+                    <option value="US">United States</option>
+                    <option value="CA">Canada</option>
+                    <option value="UK">United Kingdom</option>
+                    <option value="AU">Australia</option>
+                    <option value="IN">India</option>
+                    <option value="DE">Germany</option>
+                    <option value="FR">France</option>
+                    <option value="JP">Japan</option>
+                    <option value="OTHER">Other</option>
+                </select>
+                <div class="error-message"></div>
+            </div>
+
+            <div class="terms-checkbox">
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">
+                    I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>
+                </label>
+            </div>
+
+            <button type="submit" class="btn-signup">Create Account</button>
+        </form>
+
+        <div class="divider">or sign up with</div>
+
+        <div class="social-signup">
+            <button type="button" class="social-btn" id="googleSignup">
+                <i class="fab fa-google"></i> Google
+            </button>
+            <button type="button" class="social-btn" id="facebookSignup">
+                <i class="fab fa-facebook"></i> Facebook
+            </button>
+        </div>
+
+        <div class="auth-links">
+            <p>Already have an account? <a href="login.html">Login here</a></p>
+        </div>
+    </section>
+
+    <footer class="section-p1">
+        <div class="col">
+            <img src="img/logo.png" class="logo" alt="">
+            <h4>Contact</h4>
+            <p><strong>Address:</strong> 562 Wellington Road, Street 32, San Francisco</p>
+            <p><strong>Phone:</strong> +1 715 123 3876 / (+91) 90112 34567</p>
+            <p><strong>Hours:</strong> 10:00 - 18:00, Mon - Sun</p>
+            <div class="follow">
+                <h4>Follow us</h4>
+                <div class="icon">
+                    <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-pinterest-p"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <h4>About</h4>
+            <a href="#">About us</a>
+            <a href="#">Delivery Information</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+            <a href="#">Contact Us</a>
+        </div>
+
+        <div class="col">
+            <h4>My Account</h4>
+            <a href="login.html">Sign In</a>
+            <a href="cart.html">View Cart</a>
+            <a href="#">My Wishlist</a>
+            <a href="#">Track My Order</a>
+            <a href="contact.html">Help</a>
+        </div>
+
+        <div class="col install">
+            <h4>Install App</h4>
+            <p>From App Store or Google Play</p>
+            <div class="row">
+                <img src="img/pay/app.jpg" alt="">
+                <img src="img/pay/play.jpg" alt="">
+            </div>
+            <p>Secured Payment Gateways</p>
+            <img src="img/pay/pay.png" alt="">
+        </div>
+
+        <div class="copyright">
+            <p>@ 2024, Tech2etc - HTML CSS Ecommerce Template</p>
+        </div>
+    </footer>
+
+    <script src="js/cart.js"></script>
+</body>
+</html>

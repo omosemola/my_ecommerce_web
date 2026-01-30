@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        input { padding: 8px; margin: 10px 0; width: 200px; }
+        button { padding: 10px 20px; background: #088178; color: white; border: none; cursor: pointer; }
+        button:hover { background: #066a63; }
+        .result { margin-top: 20px; padding: 10px; background: #f0f0f0; border-radius: 5px; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>🔐 Admin Login Test</h1>
+    
+    <input type="password" id="password" placeholder="Enter password" value="admin123">
+    <button onclick="testLogin()">Test Login</button>
+    
+    <div class="result">
+        <p>Response:</p>
+        <pre id="response">Click "Test Login" to test...</pre>
+    </div>
+
+    <script>
+        async function testLogin() {
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('response');
+            
+            try {
+                console.log('Sending login request...');
+                const response = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ password })
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                const text = await response.text();
+                console.log('Response text:', text);
+                
+                try {
+                    const data = JSON.parse(text);
+                    console.log('Parsed JSON:', data);
+                    
+                    if (data.success) {
+                        resultDiv.innerHTML = `<span class="success">✓ Login successful!</span><br>Token: ${data.token}`;
+                        localStorage.setItem('adminToken', data.token);
+                    } else {
+                        resultDiv.innerHTML = `<span class="error">✗ Error: ${data.error}</span>`;
+                    }
+                } catch (e) {
+                    resultDiv.innerHTML = `<span class="error">✗ JSON Parse Error: ${text.substring(0, 100)}</span>`;
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                resultDiv.innerHTML = `<span class="error">✗ Fetch Error: ${error.message}</span>`;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Templates Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .template-wrapper {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .template-header {
+            background: #f0f0f0;
+            padding: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        .template-header h2 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .template-header p {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .template-preview {
+            padding: 0;
+            background: white;
+            overflow: hidden;
+        }
+        
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            display: block;
+        }
+        
+        .template-download {
+            background: #f9f9f9;
+            padding: 15px 20px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+        
+        .info-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .info-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .info-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .info-card p {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        
+        .feature-list {
+            list-style: none;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: #666;
+        }
+        
+        .feature-list li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .templates-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            iframe {
+                height: 800px;
+            }
+            
+            .header h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📧 Email Templates Preview</h1>
+            <p>Professional email templates for your e-commerce store</p>
+        </div>
+        
+        <div class="templates-grid">
+            <!-- Order Confirmation Email -->
+            <div class="template-wrapper">
+                <div class="template-header">
+                    <h2>📦 Order Confirmation</h2>
+                    <p>Sent automatically when customer places order</p>
+                </div>
+                <div class="template-preview">
+                    <iframe src="javascript:void(0)" id="confirmFrame"></iframe>
+                </div>
+                <div class="template-download">
+                    <button class="btn btn-primary" onclick="copyHTML('confirm')">Copy HTML</button>
+                    <button class="btn btn-secondary" onclick="downloadHTML('confirm', 'order-confirmation.html')">Download</button>
+                </div>
+            </div>
+            
+            <!-- Shipping Notification Email -->
+            <div class="template-wrapper">
+                <div class="template-header">
+                    <h2>🚚 Shipping Notification</h2>
+                    <p>Sent from admin dashboard with tracking info</p>
+                </div>
+                <div class="template-preview">
+                    <iframe src="javascript:void(0)" id="shippingFrame"></iframe>
+                </div>
+                <div class="template-download">
+                    <button class="btn btn-primary" onclick="copyHTML('shipping')">Copy HTML</button>
+                    <button class="btn btn-secondary" onclick="downloadHTML('shipping', 'shipping-notification.html')">Download</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Template Details -->
+        <div class="info-section">
+            <h2>✨ Template Features</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>📧 Order Confirmation</h3>
+                    <ul class="feature-list">
+                        <li>Order ID & Date</li>
+                        <li>Customer Info</li>
+                        <li>Shipping Address</li>
+                        <li>Item List</li>
+                        <li>Price Breakdown</li>
+                        <li>Total Amount</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h3>🚚 Shipping Notification</h3>
+                    <ul class="feature-list">
+                        <li>Order ID</li>
+                        <li>Tracking Number</li>
+                        <li>Clickable Link</li>
+                        <li>Delivery Date</li>
+                        <li>Customer Name</li>
+                        <li>Call to Action</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h3>🎨 Design</h3>
+                    <ul class="feature-list">
+                        <li>Professional HTML</li>
+                        <li>Branded Colors</li>
+                        <li>Responsive Layout</li>
+                        <li>Mobile Optimized</li>
+                        <li>Dark Mode Support</li>
+                        <li>Cross-Client Compatible</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h3>🔧 Technical</h3>
+                    <ul class="feature-list">
+                        <li>Nodemailer Powered</li>
+                        <li>Multiple Providers</li>
+                        <li>Inline CSS</li>
+                        <li>No External Files</li>
+                        <li>Fast Delivery</li>
+                        <li>Error Handling</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Configuration Info -->
+        <div class="info-section">
+            <h2>⚙️ Email Providers Supported</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>📧 Gmail (Testing)</h3>
+                    <p>Perfect for development and testing:</p>
+                    <p style="margin-top: 10px; color: #333;">
+                        <strong>Setup:</strong> Create App Password<br>
+                        <strong>Speed:</strong> Fast<br>
+                        <strong>Cost:</strong> Free<br>
+                        <strong>Best For:</strong> Development
+                    </p>
+                </div>
+                
+                <div class="info-card">
+                    <h3>📤 SendGrid (Production)</h3>
+                    <p>Recommended for production:</p>
+                    <p style="margin-top: 10px; color: #333;">
+                        <strong>Setup:</strong> API Key<br>
+                        <strong>Speed:</strong> Very Fast<br>
+                        <strong>Cost:</strong> $14.95/month<br>
+                        <strong>Best For:</strong> Production
+                    </p>
+                </div>
+                
+                <div class="info-card">
+                    <h3>📧 Mailgun (Alternative)</h3>
+                    <p>Great alternative option:</p>
+                    <p style="margin-top: 10px; color: #333;">
+                        <strong>Setup:</strong> API Key<br>
+                        <strong>Speed:</strong> Very Fast<br>
+                        <strong>Cost:</strong> Free (1000 emails)<br>
+                        <strong>Best For:</strong> Small Business
+                    </p>
+                </div>
+                
+                <div class="info-card">
+                    <h3>🔗 Custom SMTP</h3>
+                    <p>Use any SMTP service:</p>
+                    <p style="margin-top: 10px; color: #333;">
+                        <strong>Setup:</strong> SMTP Details<br>
+                        <strong>Speed:</strong> Depends<br>
+                        <strong>Cost:</strong> Varies<br>
+                        <strong>Best For:</strong> Enterprise
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- API Testing -->
+        <div class="info-section">
+            <h2>🧪 Test Emails</h2>
+            <p style="margin-bottom: 20px; color: #666;">
+                Visit <a href="/TEST_EMAIL.html" style="color: #667eea; text-decoration: none;"><strong>TEST_EMAIL.html</strong></a> to test email configuration and send test emails.
+            </p>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>1️⃣ Test Configuration</h3>
+                    <p>Send a test email to verify your setup is working correctly. This helps confirm email credentials are valid.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3>2️⃣ Resend Confirmation</h3>
+                    <p>Resend order confirmation email for existing orders. Useful if customer didn't receive the original email.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3>3️⃣ Send Shipping</h3>
+                    <p>Send shipping notification with tracking number. Can be done anytime after order is placed.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Order Confirmation Template
+        const confirmTemplate = `
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+  <div style="background: linear-gradient(135deg, #088178 0%, #066a63 100%); color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0;">
+    <h2 style="margin: 0;">Order Confirmed!</h2>
+    <p style="margin: 5px 0 0 0; opacity: 0.9;">Thank you for your purchase</p>
+  </div>
+  
+  <div style="padding: 20px; background: #f9f9f9;">
+    <h3 style="color: #333;">Order Details</h3>
+    <p><strong>Order ID:</strong> #ORD-1234567890</p>
+    <p><strong>Order Date:</strong> January 15, 2024</p>
+    
+    <h3 style="color: #333; margin-top: 20px;">Customer Information</h3>
+    <p>
+      <strong>John Doe</strong><br>
+      john@example.com<br>
+      555-1234
+    </p>
+    
+    <h3 style="color: #333; margin-top: 20px;">Shipping Address</h3>
+    <p>
+      123 Main Street<br>
+      New York, NY 10001<br>
+      United States
+    </p>
+    
+    <h3 style="color: #333; margin-top: 20px;">Order Items</h3>
+    <table style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr style="background: #f0f0f0;">
+          <th style="padding: 10px; text-align: left; border-bottom: 2px solid #088178;">Product</th>
+          <th style="padding: 10px; text-align: center; border-bottom: 2px solid #088178;">Quantity</th>
+          <th style="padding: 10px; text-align: right; border-bottom: 2px solid #088178;">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding: 10px; border-bottom: 1px solid #ddd;">Cartoon Astronaut T-Shirt</td>
+          <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">2</td>
+          <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: right;">$156.00</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; border-bottom: 1px solid #ddd;">Casual Jacket</td>
+          <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">1</td>
+          <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: right;">$89.00</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div style="margin-top: 20px; text-align: right; font-size: 14px;">
+      <p><strong>Subtotal:</strong> $245.00</p>
+      <p><strong>Tax:</strong> $19.60</p>
+      <p><strong>Shipping:</strong> $10.00</p>
+      <p style="font-size: 16px; color: #088178;"><strong>Total: $274.60</strong></p>
+    </div>
+    
+    <div style="background: #e8f5f0; padding: 15px; margin-top: 20px; border-radius: 5px; text-align: center;">
+      <p style="margin: 0; color: #066a63;">
+        <strong>Your order is being processed</strong><br>
+        You will receive a shipping notification soon!
+      </p>
+    </div>
+  </div>
+  
+  <div style="background: #f0f0f0; padding: 15px; text-align: center; color: #666; font-size: 12px; border-radius: 0 0 5px 5px;">
+    <p style="margin: 0;">Questions? Contact us at support@ecommerce.com</p>
+  </div>
+</div>
+        `;
+        
+        // Shipping Notification Template
+        const shippingTemplate = `
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+  <div style="background: linear-gradient(135deg, #088178 0%, #066a63 100%); color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0;">
+    <h2 style="margin: 0;">📦 Your Order is on the Way!</h2>
+  </div>
+  
+  <div style="padding: 20px; background: #f9f9f9;">
+    <p>Hi John,</p>
+    <p>Great news! Your order has been shipped and is on its way to you.</p>
+    
+    <div style="background: white; padding: 15px; margin: 20px 0; border-left: 4px solid #088178;">
+      <p><strong>Order ID:</strong> #ORD-1234567890</p>
+      <p><strong>Tracking Number:</strong> <a href="#" style="color: #088178; text-decoration: none;">1Z999AA10123456784</a></p>
+      <p><strong>Estimated Delivery:</strong> 3-5 business days</p>
+    </div>
+    
+    <p>You can track your package using the tracking number above.</p>
+    <p style="color: #666; font-size: 14px;">Thank you for your purchase!</p>
+  </div>
+  
+  <div style="background: #f0f0f0; padding: 15px; text-align: center; color: #666; font-size: 12px; border-radius: 0 0 5px 5px;">
+    <p style="margin: 0;">Questions? Contact us at support@ecommerce.com</p>
+  </div>
+</div>
+        `;
+        
+        // Load templates into iframes
+        window.addEventListener('DOMContentLoaded', function() {
+            const confirmFrame = document.getElementById('confirmFrame');
+            const shippingFrame = document.getElementById('shippingFrame');
+            
+            confirmFrame.srcdoc = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin: 0; padding: 10px;">' + confirmTemplate + '</body></html>';
+            shippingFrame.srcdoc = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin: 0; padding: 10px;">' + shippingTemplate + '</body></html>';
+        });
+        
+        function copyHTML(type) {
+            const template = type === 'confirm' ? confirmTemplate : shippingTemplate;
+            navigator.clipboard.writeText(template).then(() => {
+                alert('HTML copied to clipboard!');
+            });
+        }
+        
+        function downloadHTML(type, filename) {
+            const template = type === 'confirm' ? confirmTemplate : shippingTemplate;
+            const html = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>' + template + '</body></html>';
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+        }
+    </script>
+</body>
+</html>

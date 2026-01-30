@@ -1,0 +1,29 @@
+Node installation and npm setup guide:
+
+1. **Download Node.js** from https://nodejs.org/ (LTS version recommended)
+2. **Install** Node.js (npm is included)
+3. **Verify installation**:
+   ```
+   node --version
+   npm --version
+   ```
+
+To start the backend:
+1. Open terminal in this folder
+2. Run: `npm install`
+3. Create `.env` file with your settings
+4. Run: `npm run dev`
+5. Backend runs on http://localhost:3000
+
+To test the API:
+- Use Postman or curl
+- Or visit http://localhost:3000/api/health
+
+MongoDB Setup (choose one):
+- **Local**: Download from https://www.mongodb.com/try/download/community
+- **Cloud**: Use MongoDB Atlas (free tier available) at https://www.mongodb.com/cloud/atlas
+
+Stripe Setup:
+1. Create account at https://stripe.com
+2. Get API keys from Stripe dashboard
+3. Add to .env file

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Storage Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #088178;
+            margin-bottom: 20px;
+        }
+
+        .test-button {
+            background: #088178;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px 10px 0;
+            font-size: 14px;
+        }
+
+        .test-button:hover {
+            background: #066a63;
+        }
+
+        .result {
+            background: #f9f9f9;
+            border-left: 4px solid #088178;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .success {
+            background: #e8f5e9;
+            border-left-color: #4caf50;
+            color: #2e7d32;
+        }
+
+        .error {
+            background: #ffebee;
+            border-left-color: #f44336;
+            color: #c62828;
+        }
+
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+
+        .button-group {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <h1>✓ Order Storage Test Suite</h1>
+
+        <div class="button-group">
+            <button class="test-button" onclick="testCreateOrder()">1. Test Create Order</button>
+            <button class="test-button" onclick="testGetAllOrders()">2. Get All Orders</button>
+            <button class="test-button" onclick="testGetOrderByEmail()">3. Get Order by Email</button>
+            <button class="test-button" onclick="clearResults()">Clear Results</button>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const API_URL = '/api';
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+
+        function addResult(title, data, isSuccess = true) {
+            const resultsDiv = document.getElementById('results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `result ${isSuccess ? 'success' : 'error'}`;
+            resultDiv.innerHTML = `
+                <strong>${title}</strong>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            `;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        async function testCreateOrder() {
+            try {
+                const testOrder = {
+                    customer: {
+                        firstName: 'John',
+                        lastName: 'Doe',
+                        email: 'john@example.com',
+                        phone: '+1234567890'
+                    },
+                    shipping: {
+                        address: '123 Main Street',
+                        city: 'San Francisco',
+                        state: 'CA',
+                        zip: '94102',
+                        country: 'USA'
+                    },
+                    payment: 'credit-card',
+                    items: [
+                        { id: 1, name: 'Cartoon Astronaut T-Shirt', price: 49.00, quantity: 2 },
+                        { id: 2, name: 'Leaf Printed T-Shirt', price: 39.00, quantity: 1 }
+                    ],
+                    subtotal: 137.00,
+                    shippingCost: 10.00,
+                    tax: 13.70,
+                    total: 160.70
+                };
+
+                const response = await fetch(`${API_URL}/orders`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testOrder)
+                });
+
+                const result = await response.json();
+                addResult('✅ Order Created Successfully', result, true);
+            } catch (error) {
+                addResult('❌ Error Creating Order', { error: error.message }, false);
+            }
+        }
+
+        async function testGetAllOrders() {
+            try {
+                const response = await fetch(`${API_URL}/orders`);
+                const result = await response.json();
+                addResult('✅ All Orders Retrieved', result, true);
+            } catch (error) {
+                addResult('❌ Error Getting Orders', { error: error.message }, false);
+            }
+        }
+
+        async function testGetOrderByEmail() {
+            try {
+                const response = await fetch(`${API_URL}/orders/email/john@example.com`);
+                const result = await response.json();
+                addResult('✅ Orders by Email Retrieved', result, true);
+            } catch (error) {
+                addResult('❌ Error Getting Orders by Email', { error: error.message }, false);
+            }
+        }
+
+        // Auto-run test on load
+        window.addEventListener('load', () => {
+            console.log('Test page ready. Click buttons to test order storage.');
+        });
+    </script>
+</body>
+
+</html>
