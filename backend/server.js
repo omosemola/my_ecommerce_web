@@ -1,4 +1,12 @@
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const path = require('path');
+const nodemailer = require('nodemailer');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY || 'sk_test_dummy');
 require('dotenv').config();
 
 const User = require('./models/User');
