@@ -145,22 +145,15 @@ document.addEventListener('DOMContentLoaded', () => {
     checkoutForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // DEBUGGING: Trace the flow
-        alert('Payment Button Clicked!');
-
         if (!document.getElementById('terms').checked) {
             alert('Please agree to the Terms & Conditions');
             return;
         }
 
-        console.log('Terms checked. Checking Paystack key...');
-
         if (!paystackPublicKey) {
-            alert('Error: Paystack Key is missing! Please refresh.');
+            alert('Paystack not initialized yet. Please refresh the page.');
             return;
         }
-
-        alert('Paystack Key Check Passed: ' + paystackPublicKey);
 
         const submitBtn = document.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
@@ -168,7 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Initializing Paystack...';
 
         try {
-            alert('Preparing Payment Data...');
             // Collect Data
             const formData = new FormData(checkoutForm);
             const subtotal = parseFloat(document.getElementById('subtotal').textContent.replace('₦', ''));
@@ -257,7 +249,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            alert('Opening Paystack Popup...');
             handler.openIframe();
 
         } catch (error) {
