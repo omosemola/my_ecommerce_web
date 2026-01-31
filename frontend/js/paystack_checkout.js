@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('total').textContent = `₦${total}`;
     }
 
-    // PAYSTACK PAYMENT HANDLER
+    // PAYSTACK PAYMENT HANDLER (V2)
     checkoutForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -192,8 +192,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 tax: tax
             };
 
-            // Initialize Paystack Popup
-            const handler = PaystackPop.setup({
+            // Initialize Paystack V2
+            const paystack = new PaystackPop();
+            paystack.newTransaction({
                 key: paystackPublicKey,
                 email: email,
                 amount: amountKobo,
@@ -210,12 +211,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     ]
                 },
-                onClose: function () {
+                onCancel: function () {
                     alert('Transaction was not completed, window closed.');
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = originalText;
                 },
-                callback: async function (response) {
+                onSuccess: async function (transaction) {
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying Payment...';
 
                     // Verify Payment on Backend
@@ -224,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
-                                reference: response.reference,
+                                reference: transaction.reference, // V2 returns transaction object with reference
                                 orderData: orderData,
                                 items: orderData.items,
                                 total: orderData.total
@@ -248,8 +249,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             });
-
-            handler.openIframe();
 
         } catch (error) {
             console.error('Checkout Error:', error);
