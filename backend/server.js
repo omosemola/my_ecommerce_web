@@ -170,16 +170,23 @@ const verifyToken = (req, res, next) => {
 // Middleware for admin authentication
 const verifyAdminToken = (req, res, next) => {
   const token = req.headers['authorization'];
-  if (!token) return res.status(401).json({ error: 'No admin token provided' });
+  if (!token) {
+    console.log('⚠️ verifyAdminToken: No token provided');
+    return res.status(401).json({ error: 'No admin token provided' });
+  }
 
   try {
     const decoded = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET || 'secret');
+    console.log('✅ verifyAdminToken decoded:', decoded);
+
     if (decoded.role !== 'admin') {
+      console.log('❌ verifyAdminToken: Role mismatch:', decoded.role);
       return res.status(403).json({ error: 'Admin access required' });
     }
     req.adminId = decoded.id;
     next();
   } catch (err) {
+    console.log('❌ verifyAdminToken error:', err.message);
     res.status(401).json({ error: 'Invalid admin token' });
   }
 };
