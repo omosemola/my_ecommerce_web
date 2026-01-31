@@ -562,53 +562,63 @@ app.get('/api/health', (req, res) => {
 });
 
 // ============================================
-// STRIPE PAYMENT ENDPOINTS
+// PAYSTACK PAYMENT ENDPOINTS
 // ============================================
 
-// Create Payment Intent for Checkout
-app.post('/api/create-payment-intent', async (req, res) => {
-  try {
-    const { amount, currency = 'NGN', customerEmail, customerName } = req.body;
+const https = require('https');
 
-    if (!amount || amount <= 0) {
-      return res.status(400).json({ error: 'Invalid amount' });
-    }
-
-    // Create Stripe Payment Intent
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Convert to cents
-      currency: currency.toLowerCase(),
-      metadata: {
-        customerName: customerName || 'Guest',
-        customerEmail: customerEmail || 'no-email@example.com'
-      }
-    });
-
-    console.log('💳 Payment Intent created:', paymentIntent.id);
-
-    res.json({
-      success: true,
-      clientSecret: paymentIntent.client_secret,
-      paymentIntentId: paymentIntent.id
-    });
-  } catch (error) {
-    console.error('❌ Payment Intent Error:', error.message);
-    res.status(500).json({ error: error.message });
-  }
+// Get Paystack Public Key
+app.get('/api/paystack-public-key', (req, res) => {
+  const publicKey = process.env.PAYSTACK_PUBLIC_KEY || 'pk_test_dummy';
+  res.json({ publicKey });
 });
 
-// Process Payment and Create Order
-app.post('/api/process-payment', async (req, res) => {
+// Verify Paystack Payment and Create Order
+app.post('/api/paystack/verify-payment', async (req, res) => {
   try {
-    const { paymentIntentId, orderData, items, total } = req.body;
-    if (!paymentIntentId || !orderData || !items || total === undefined) {
+    const { reference, orderData, items, total } = req.body;
+
+    if (!reference || !orderData || !items) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
-    if (paymentIntent.status !== 'succeeded') {
-      return res.status(400).json({ success: false, error: 'Payment not completed. Status: ' + paymentIntent.status });
+    // Verify transaction with Paystack API
+    const verifyPromise = new Promise((resolve, reject) => {
+      const options = {
+        hostname: 'api.paystack.co',
+        port: 443,
+        path: `/transaction/verify/${reference}`,
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY || 'sk_test_dummy'}`,
+          'Content-Type': 'application/json'
+        }
+      };
+
+      const reqPaystack = https.request(options, resPaystack => {
+        let data = '';
+        resPaystack.on('data', chunk => { data += chunk; });
+        resPaystack.on('end', () => {
+          try {
+            resolve(JSON.parse(data));
+          } catch (e) {
+            reject(e);
+          }
+        });
+      });
+
+      reqPaystack.on('error', error => { reject(error); });
+      reqPaystack.end();
+    });
+
+    const paystackResponse = await verifyPromise;
+
+    if (!paystackResponse.status || paystackResponse.data.status !== 'success') {
+      return res.status(400).json({ success: false, error: 'Payment verification failed' });
     }
+
+    // Payment Verified - Create Order
+    console.log('✅ Paystack Payment Verified:', paystackResponse.data.reference);
 
     const order = new Order({
       id: 'ORD-' + Date.now(),
@@ -618,7 +628,8 @@ app.post('/api/process-payment', async (req, res) => {
       subtotal: orderData.subtotal || parseFloat(total),
       shippingCost: orderData.shipping || 0,
       tax: orderData.tax || 0,
-      status: 'completed',
+      status: 'paid', // Mark as paid immediately
+      paymentReference: reference,
       timestamp: new Date()
     });
 
@@ -632,9 +643,10 @@ app.post('/api/process-payment', async (req, res) => {
       console.warn('⚠️ Email error:', emailError.message);
     }
 
-    res.json({ success: true, message: 'Order created successfully', orderId: order.id, orderData: order });
+    res.json({ success: true, message: 'Order created successfully', orderId: order.id });
+
   } catch (error) {
-    console.error('❌ Processing Error:', error.message);
+    console.error('❌ Paystack Error:', error.message);
     res.status(500).json({ success: false, error: error.message });
   }
 });
